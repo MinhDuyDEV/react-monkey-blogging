@@ -1,5 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import { Input } from "../components/input";
+import { Label } from "../components/label";
+import { useForm } from "react-hook-form";
+import { IconEyeClose } from "../components/icon";
 
 const SignUpPageStyles = styled.div`
   min-height: 100vh;
@@ -20,30 +24,6 @@ const SignUpPageStyles = styled.div`
     row-gap: 20px;
     align-items: flex-start;
   }
-  .label {
-    color: ${(props) => props.theme.grayDark};
-    font-weight: 600;
-    cursor: pointer;
-  }
-  .input {
-    padding: 20px;
-    width: 100%;
-    background-color: ${(props) => props.theme.grayLight};
-    border-radius: 8px;
-    font-weight: 500;
-    border: 1px solid transparent;
-    transition: all 0.2s linear;
-  }
-  .input:focus {
-    background-color: white;
-    border-color: ${(props) => props.theme.primary};
-  }
-  .input::-webkit-input-placeholder {
-    color: #84878b;
-  }
-  .input::-moz-input-placeholder {
-    color: #84878b;
-  }
   .form {
     max-width: 600px;
     margin: 0 auto;
@@ -51,22 +31,28 @@ const SignUpPageStyles = styled.div`
 `;
 
 const SignUpPage = () => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid, isSubmitting },
+    watch,
+  } = useForm({});
+  const handleSignUp = (values) => {
+    console.log(values);
+  };
   return (
     <SignUpPageStyles>
       <div className="container">
         <img srcSet="/logo.png 2x" alt="monkey-blogging" className="logo" />
         <h1 className="heading">Monkey Blogging</h1>
-        <form className="form">
+        <form className="form" onSubmit={handleSubmit(handleSignUp)}>
           <div className="field">
-            <label htmlFor="fullName" className="label">
-              Full Name
-            </label>
-            <input
+            <Label htmlFor="fullName">Full Name</Label>
+            <Input
               type="text"
-              className="input"
+              name="fullName"
               placeholder="Enter your full name"
-              id="fullName"
-              autoComplete="off"
+              control={control}
             />
           </div>
         </form>
