@@ -25,6 +25,10 @@ const InputStyles = styled.div`
   input::-moz-input-placeholder {
     color: #84878b;
   }
+  input::-ms-reveal,
+  input::-ms-clear {
+    display: none;
+  }
   .input-icon {
     position: absolute;
     right: 20px;
@@ -43,7 +47,7 @@ const Input = ({ name = "", type = "text", children, control, ...props }) => {
   return (
     <InputStyles hasIcon={children ? true : false}>
       <input type={type} id={name} {...field} {...props} />
-      {children}
+      {children ? <div className="input-icon">{children}</div> : null}
     </InputStyles>
   );
 };
