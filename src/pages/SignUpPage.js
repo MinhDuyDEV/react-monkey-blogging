@@ -60,7 +60,6 @@ const SignUpPage = () => {
     control,
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
-    reset,
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
@@ -68,7 +67,7 @@ const SignUpPage = () => {
   const handleSignUp = async (values) => {
     if (!isValid) return;
     console.log("🚀 ~ file: SignUpPage.js:64 ~ handleSignUp ~ values", values);
-    const user = await createUserWithEmailAndPassword(
+    await createUserWithEmailAndPassword(
       auth,
       values.emailAddress,
       values.password
