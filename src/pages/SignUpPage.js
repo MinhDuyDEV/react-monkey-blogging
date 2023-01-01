@@ -34,9 +34,18 @@ const SignUpPage = () => {
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
     watch,
-  } = useForm({});
+    reset,
+  } = useForm({
+    mode: "onChange",
+  });
   const handleSignUp = (values) => {
-    console.log(values);
+    if (!isValid) return;
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+        console.log(values);
+      }, 5000);
+    });
   };
   const [togglePassword, setTogglePassword] = useState(false);
   return (
@@ -86,7 +95,17 @@ const SignUpPage = () => {
               )}
             </Input>
           </Field>
-          <Button type="submit">Sign Up</Button>
+          <Button
+            type="submit"
+            style={{
+              maxWidth: 300,
+              margin: "0 auto",
+            }}
+            isLoading={isSubmitting}
+            disabled={isSubmitting}
+          >
+            Sign Up
+          </Button>
         </form>
       </div>
     </SignUpPageStyles>

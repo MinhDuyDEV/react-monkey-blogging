@@ -14,7 +14,7 @@ const ButtonStyles = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: ${(props) => props.height || "70px"};
+  height: ${(props) => props.height || "66px"};
   margin-top: 10px;
   background-image: linear-gradient(
     to right bottom,
@@ -22,7 +22,7 @@ const ButtonStyles = styled.button`
     ${(props) => props.theme.secondary}
   );
   &:disabled {
-    opacity: 0.5;
+    opacity: 0.7;
     pointer-events: none;
   }
 `;
