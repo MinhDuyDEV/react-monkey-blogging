@@ -85,17 +85,6 @@ const SignUpPage = () => {
       pauseOnHover: false,
     });
     navigate("/");
-    // return new Promise((resolve) => {
-    //   setTimeout(() => {
-    //     resolve();
-    //     console.log(values);
-    //     reset({
-    //       fullName: "",
-    //       emailAddress: "",
-    //       password: "",
-    //     });
-    //   }, 3000);
-    // });
   };
   const [togglePassword, setTogglePassword] = useState(false);
   useEffect(() => {
