@@ -7,7 +7,10 @@ import { IconEyeClose, IconEyeOpen } from "../components/icon";
 import { Field } from "../components/field";
 import { useState } from "react";
 import { Button } from "../components/button";
-import { LoadingSpinner } from "../components/loading";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 const SignUpPageStyles = styled.div`
   min-height: 100vh;
@@ -28,6 +31,25 @@ const SignUpPageStyles = styled.div`
   }
 `;
 
+const schema = yup.object().shape({
+  fullName: yup.string().required("Please enter your full name"),
+  emailAddress: yup
+    .string()
+    .email("Please enter valid email address")
+    .required("Please enter your email address"),
+  password: yup
+    .string()
+    .min(8, "Your password must be at least 8 characters or greater")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      {
+        message:
+          "Your password must have at least uppercase, 1 lowercase and 1 special characters",
+      }
+    )
+    .required("Please enter your password"),
+});
+
 const SignUpPage = () => {
   const {
     control,
@@ -36,6 +58,7 @@ const SignUpPage = () => {
     watch,
     reset,
   } = useForm({
+    resolver: yupResolver(schema),
     mode: "onChange",
   });
   const handleSignUp = (values) => {
@@ -44,10 +67,23 @@ const SignUpPage = () => {
       setTimeout(() => {
         resolve();
         console.log(values);
-      }, 5000);
+        reset({
+          fullName: "",
+          emailAddress: "",
+          password: "",
+        });
+      }, 3000);
     });
   };
   const [togglePassword, setTogglePassword] = useState(false);
+  useEffect(() => {
+    const arrErrors = Object.values(errors);
+    if (arrErrors.length > 0)
+      toast.error(arrErrors[0]?.message, {
+        pauseOnHover: false,
+        delay: 0,
+      });
+  }, [errors]);
   return (
     <SignUpPageStyles>
       <div className="container">
