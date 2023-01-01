@@ -11,6 +11,10 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth, db } from "../firebase/firebase-config";
+import { useNavigate } from "react-router-dom";
+import { addDoc, collection } from "firebase/firestore";
 
 const SignUpPageStyles = styled.div`
   min-height: 100vh;
@@ -51,29 +55,48 @@ const schema = yup.object().shape({
 });
 
 const SignUpPage = () => {
+  const navigate = useNavigate();
   const {
     control,
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
-    watch,
     reset,
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
   });
-  const handleSignUp = (values) => {
+  const handleSignUp = async (values) => {
     if (!isValid) return;
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve();
-        console.log(values);
-        reset({
-          fullName: "",
-          emailAddress: "",
-          password: "",
-        });
-      }, 3000);
+    console.log("🚀 ~ file: SignUpPage.js:64 ~ handleSignUp ~ values", values);
+    const user = await createUserWithEmailAndPassword(
+      auth,
+      values.emailAddress,
+      values.password
+    );
+    await updateProfile(auth.currentUser, {
+      displayName: values.fullName,
     });
+    const colRef = collection(db, "users");
+    await addDoc(colRef, {
+      name: values.fullName,
+      email: values.emailAddress,
+      password: values.password,
+    });
+    toast.success("Sign Up successfully!!!", {
+      pauseOnHover: false,
+    });
+    navigate("/");
+    // return new Promise((resolve) => {
+    //   setTimeout(() => {
+    //     resolve();
+    //     console.log(values);
+    //     reset({
+    //       fullName: "",
+    //       emailAddress: "",
+    //       password: "",
+    //     });
+    //   }, 3000);
+    // });
   };
   const [togglePassword, setTogglePassword] = useState(false);
   useEffect(() => {
