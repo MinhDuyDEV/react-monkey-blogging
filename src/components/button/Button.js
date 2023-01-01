@@ -53,7 +53,7 @@ Button.propTypes = {
   type: PropTypes.oneOf(["button", "submit"]).isRequired,
   isLoading: PropTypes.bool,
   onClick: PropTypes.func,
-  children: PropTypes.element,
+  children: PropTypes.node,
 };
 
 export default Button;
