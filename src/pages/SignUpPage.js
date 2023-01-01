@@ -1,20 +1,18 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { IconEyeClose, IconEyeOpen } from "../components/icon";
 import { Input } from "../components/input";
 import { Label } from "../components/label";
 import { useForm } from "react-hook-form";
-import { IconEyeClose, IconEyeOpen } from "../components/icon";
 import { Field } from "../components/field";
-import { useState } from "react";
 import { Button } from "../components/button";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect } from "react";
-import { toast } from "react-toastify";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../firebase/firebase-config";
+import AuthenticationPage from "./AuthenticationPage";
+import * as yup from "yup";
+import { toast } from "react-toastify";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { NavLink, useNavigate } from "react-router-dom";
 import { addDoc, collection } from "firebase/firestore";
-import AuthenticationPage from "./AuthenticationPage";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 const schema = yup.object().shape({
   fullName: yup.string().required("Please enter your full name"),
