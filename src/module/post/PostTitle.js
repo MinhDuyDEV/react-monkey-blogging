@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, useHref } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import styled, { css } from "styled-components";
 
 const PostTitleStyles = styled.h3`
