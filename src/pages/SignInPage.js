@@ -7,14 +7,13 @@ import { toast } from "react-toastify";
 import { Field } from "../components/field";
 import { Label } from "../components/label";
 import { Input } from "../components/input";
-import { IconEyeClose, IconEyeOpen } from "../components/icon";
 import { Button } from "../components/button";
-import { useState } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import AuthenticationPage from "./AuthenticationPage";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/firebase-config";
+import InputPasswordToggle from "../components/input/InputPasswordToggle";
 
 const schema = yup.object({
   email: yup
@@ -35,7 +34,6 @@ const schema = yup.object({
 });
 
 const SignInPage = () => {
-  const [togglePassword, setTogglePassword] = useState(false);
   const { userInfo } = useAuth();
   const navigate = useNavigate();
   const {
@@ -90,22 +88,7 @@ const SignInPage = () => {
         </Field>
         <Field>
           <Label htmlFor="password">Password</Label>
-          <Input
-            type={togglePassword ? "text" : "password"}
-            name="password"
-            placeholder="Please enter your password"
-            control={control}
-          >
-            {togglePassword ? (
-              <IconEyeOpen
-                onClick={() => setTogglePassword(!togglePassword)}
-              ></IconEyeOpen>
-            ) : (
-              <IconEyeClose
-                onClick={() => setTogglePassword(!togglePassword)}
-              ></IconEyeClose>
-            )}
-          </Input>
+          <InputPasswordToggle control={control}></InputPasswordToggle>
         </Field>
         <div className="have-account">
           You already have an account?{" "}
