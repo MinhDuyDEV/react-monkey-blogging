@@ -16,14 +16,14 @@ import AuthenticationPage from "./AuthenticationPage";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/firebase-config";
 
-const schema = yup.object().shape({
-  emailAddress: yup
+const schema = yup.object({
+  email: yup
     .string()
     .email("Please enter valid email address")
     .required("Please enter your email address"),
   password: yup
     .string()
-    .min(8, "Your password must be at least 8 character or greater")
+    .min(8, "Your password must be at least 8 characters or greater")
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
       {
@@ -38,12 +38,6 @@ const SignInPage = () => {
   const [togglePassword, setTogglePassword] = useState(false);
   const { userInfo } = useAuth();
   const navigate = useNavigate();
-  useEffect(() => {
-    document.title = "Login Page";
-    if (userInfo?.email) navigate("/");
-    else navigate("/sign-in");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   const {
     control,
     handleSubmit,
@@ -54,16 +48,16 @@ const SignInPage = () => {
   });
   const handleSignIn = async (values) => {
     if (!isValid) return;
-    await signInWithEmailAndPassword(
-      auth,
-      values.emailAddress,
-      values.password
-    );
-    console.log("🚀 ~ file: SignInPage.js:43 ~ handleSignIn ~ values", values);
-    toast.success("Sign In successfully!!!", {
-      pauseOnHover: false,
-    });
-    navigate("/");
+    try {
+      await signInWithEmailAndPassword(auth, values.email, values.password);
+      toast.success("Sign In successfully!!!", {
+        pauseOnHover: false,
+      });
+      navigate("/");
+    } catch (error) {
+      if (error.message.includes("wrong-password"))
+        toast.error("It seems your password was wrong");
+    }
   };
   useEffect(() => {
     const arrError = Object.values(errors);
@@ -73,6 +67,11 @@ const SignInPage = () => {
         delay: 0,
       });
   }, [errors]);
+  useEffect(() => {
+    document.title = "Login Page";
+    if (userInfo?.email) navigate("/");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userInfo]);
   return (
     <AuthenticationPage>
       <form
@@ -81,10 +80,10 @@ const SignInPage = () => {
         autoComplete="off"
       >
         <Field>
-          <Label htmlFor="emailAddress">Email address</Label>
+          <Label htmlFor="email">Email address</Label>
           <Input
             type="email"
-            name="emailAddress"
+            name="email"
             placeholder="Please enter your email address"
             control={control}
           />
@@ -115,6 +114,7 @@ const SignInPage = () => {
         <Button
           type="submit"
           style={{
+            width: "100%",
             maxWidth: 300,
             margin: "0 auto",
           }}
