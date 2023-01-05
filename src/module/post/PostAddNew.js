@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { Button } from "../../components/button";
@@ -15,6 +15,7 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
+import ImageUpload from "../../components/image/ImageUpload";
 const PostAddNewStyles = styled.div``;
 
 const PostAddNew = () => {
@@ -33,8 +34,10 @@ const PostAddNew = () => {
     const cloneValues = { ...values };
     cloneValues.slug = slugify(values.slug || values.title);
     cloneValues.status = Number(values.status);
-    // handleUploadImage(cloneValues.image);
+    handleUploadImage(cloneValues.image);
   };
+  const [progress, setProgress] = useState(0);
+  const [image, setImage] = useState("");
   const handleUploadImage = (file) => {
     const storage = getStorage();
     const storageRef = ref(storage, "images/" + file.name);
@@ -42,9 +45,10 @@ const PostAddNew = () => {
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        const progress =
+        const progressPercent =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log("Upload is " + progress + "% done");
+        setProgress(progressPercent);
         switch (snapshot.state) {
           case "paused":
             console.log("Upload is paused");
@@ -62,6 +66,7 @@ const PostAddNew = () => {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log("File available at", downloadURL);
+          setImage(downloadURL);
         });
       }
     );
@@ -97,7 +102,11 @@ const PostAddNew = () => {
         <div className="grid grid-cols-2 mb-10 gap-x-10">
           <Field>
             <Label>Image</Label>
-            <input type="file" name="image" onChange={onSelectImage} />
+            <ImageUpload
+              onChange={onSelectImage}
+              progress={progress}
+              image={image}
+            ></ImageUpload>
           </Field>
           <Field>
             <Label>Status</Label>
