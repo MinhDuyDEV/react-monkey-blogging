@@ -22,6 +22,10 @@ const PostMetaStyles = styled.div`
       border-radius: 100rem;
     }
   }
+  @media screen and (max-width: 1023.98px) {
+    font-size: 10px;
+    gap: 6px;
+  }
 `;
 
 const PostMeta = ({
@@ -32,7 +36,7 @@ const PostMeta = ({
   color,
 }) => {
   return (
-    <PostMetaStyles className={className} color={color}>
+    <PostMetaStyles className={`post-meta ${className}`} color={color}>
       <span className="post-time">{date}</span>
       <span className="post-dot"></span>
       <span className="post-author">{authorName}</span>

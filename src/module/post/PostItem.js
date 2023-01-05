@@ -22,6 +22,14 @@ const PostItemStyles = styled.div`
       margin-bottom: 8px;
     }
   }
+  @media screen and (max-width: 1023.98px) {
+    .post {
+      &-image {
+        aspect-ratio: 16/9;
+        height: auto;
+      }
+    }
+  }
 `;
 
 const PostItem = () => {

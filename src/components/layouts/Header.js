@@ -5,15 +5,18 @@ import { useAuth } from "../../contexts/auth-context";
 import { Button } from "../button";
 
 const HeaderStyles = styled.div`
-  padding: 40px 0;
+  padding: 20px 0;
+
   .header-main {
     display: flex;
     align-items: center;
   }
+
   .logo {
     display: block;
     max-width: 50px;
   }
+
   .menu {
     display: flex;
     align-items: center;
@@ -36,11 +39,13 @@ const HeaderStyles = styled.div`
     display: flex;
     align-items: center;
   }
+
   .search-input {
     flex: 1;
     padding-right: 45px;
     font-weight: 500;
   }
+
   .search-icon {
     position: absolute;
     top: 50%;
@@ -48,8 +53,22 @@ const HeaderStyles = styled.div`
     right: 25px;
     cursor: pointer;
   }
+
   .header-button {
     margin: auto 0;
+  }
+
+  @media screen and (max-width: 1023.98px) {
+    .logo {
+      max-width: 30px;
+    }
+
+    .menu,
+    .search,
+    .header-button,
+    .header-auth {
+      display: none;
+    }
   }
 `;
 

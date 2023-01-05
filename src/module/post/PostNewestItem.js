@@ -10,7 +10,7 @@ const PostNewestItemStyles = styled.div`
   gap: 20px;
   margin-bottom: 28px;
   padding-bottom: 28px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #ddd;
   &:last-child {
     padding-bottom: 0;
     margin-bottom: 0;
@@ -32,6 +32,16 @@ const PostNewestItemStyles = styled.div`
     }
     &-title {
       margin-bottom: 8px;
+    }
+  }
+  @media screen and (max-width: 1023.98px) {
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    .post {
+      &-image {
+        width: 140px;
+        height: 100px;
+      }
     }
   }
 `;

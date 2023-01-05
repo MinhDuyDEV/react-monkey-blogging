@@ -57,7 +57,7 @@ const Button = ({
   const child = !!isLoading ? <LoadingSpinner></LoadingSpinner> : children;
   if (to !== "" && typeof to === "string") {
     return (
-      <NavLink to={to}>
+      <NavLink to={to} className="inline-block">
         <ButtonStyles type={type} kind={kind} {...props}>
           {child}
         </ButtonStyles>
