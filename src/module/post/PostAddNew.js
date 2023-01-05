@@ -14,12 +14,14 @@ import {
   ref,
   uploadBytesResumable,
   getDownloadURL,
+  deleteObject,
 } from "firebase/storage";
 import ImageUpload from "../../components/image/ImageUpload";
 const PostAddNewStyles = styled.div``;
+const storage = getStorage();
 
 const PostAddNew = () => {
-  const { control, watch, setValue, handleSubmit } = useForm({
+  const { control, watch, setValue, handleSubmit, getValues } = useForm({
     mode: "onChange",
     defaultValues: {
       title: "",
@@ -34,12 +36,10 @@ const PostAddNew = () => {
     const cloneValues = { ...values };
     cloneValues.slug = slugify(values.slug || values.title);
     cloneValues.status = Number(values.status);
-    handleUploadImage(cloneValues.image);
   };
   const [progress, setProgress] = useState(0);
   const [image, setImage] = useState("");
   const handleUploadImage = (file) => {
-    const storage = getStorage();
     const storageRef = ref(storage, "images/" + file.name);
     const uploadTask = uploadBytesResumable(storageRef, file);
     uploadTask.on(
@@ -74,7 +74,20 @@ const PostAddNew = () => {
   const onSelectImage = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    setValue("image", file);
+    setValue("image_name", file.name);
+    handleUploadImage(file);
+  };
+  const handleDeleteImage = () => {
+    const imageRef = ref(storage, "images/" + getValues("image_name"));
+    deleteObject(imageRef)
+      .then(() => {
+        console.log("Remove image successfully!!!");
+        setImage("");
+        setProgress(0);
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+      });
   };
   return (
     <PostAddNewStyles>
@@ -104,6 +117,7 @@ const PostAddNew = () => {
             <Label>Image</Label>
             <ImageUpload
               onChange={onSelectImage}
+              handleDeleteImage={handleDeleteImage}
               progress={progress}
               image={image}
             ></ImageUpload>
