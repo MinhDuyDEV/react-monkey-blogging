@@ -6,6 +6,7 @@ const DashboardHeaderStyles = styled.div`
   padding: 20px;
   border-bottom: 1px solid #eee;
   display: flex;
+  align-items: center;
   justify-content: flex-end;
   gap: 20px;
   .header-avatar {
@@ -17,6 +18,9 @@ const DashboardHeaderStyles = styled.div`
       object-fit: cover;
       border-radius: 100rem;
     }
+  }
+  .header-button {
+    margin-top: 0;
   }
 `;
 
