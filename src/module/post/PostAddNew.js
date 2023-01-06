@@ -11,6 +11,9 @@ import { postStatus } from "../../utils/constants";
 import ImageUpload from "../../components/image/ImageUpload";
 import useFirebaseImage from "../../hooks/useFirebaseImage";
 import Toggle from "../../components/toggle/Toggle";
+import { useEffect } from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../firebase/firebase-config";
 const PostAddNewStyles = styled.div``;
 
 const PostAddNew = () => {
@@ -38,6 +41,22 @@ const PostAddNew = () => {
   };
   const { image, progress, handleSelectImage, handleDeleteImage } =
     useFirebaseImage(setValue, getValues);
+  useEffect(() => {
+    async function getData() {
+      const colRef = collection(db, "categories");
+      const q = query(colRef, where("status", "==", 1));
+      const querySnapshot = await getDocs(q);
+      let result = [];
+      querySnapshot.forEach((doc) => {
+        result.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+      console.log("🚀 ~ file: PostAddNew.js:50 ~ getData ~ result", result);
+    }
+    getData();
+  }, []);
   return (
     <PostAddNewStyles>
       <h1 className="dashboard-heading">Add new post</h1>
@@ -73,6 +92,21 @@ const PostAddNew = () => {
             ></ImageUpload>
           </Field>
           <Field>
+            <Label>Category</Label>
+            <Input control={control} placeholder="Find the author"></Input>
+          </Field>
+        </div>
+        <div className="grid grid-cols-2 mb-10 gap-x-10">
+          <Field>
+            <Label>Feature post</Label>
+            <Toggle
+              on={watchHot === true}
+              onClick={() => {
+                setValue("hot", !watchHot);
+              }}
+            ></Toggle>
+          </Field>
+          <Field>
             <Label>Status</Label>
             <div className="flex items-center gap-x-5">
               <Radio
@@ -101,22 +135,6 @@ const PostAddNew = () => {
               </Radio>
             </div>
           </Field>
-          <Field>
-            <Label>Author</Label>
-            <Input control={control} placeholder="Find the author"></Input>
-          </Field>
-        </div>
-        <div className="grid grid-cols-2 mb-10 gap-x-10">
-          <Field>
-            <Label>Feature post</Label>
-            <Toggle
-              on={watchHot === true}
-              onClick={() => {
-                setValue("hot", !watchHot);
-              }}
-            ></Toggle>
-          </Field>
-          <Field></Field>
         </div>
         <Button type="submit" className="mx-auto">
           Add new post
