@@ -16,7 +16,6 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebase/firebase-config";
 import { Dropdown } from "../../components/dropdown";
 import { useState } from "react";
-import Select from "../../components/dropdown/Select";
 const PostAddNewStyles = styled.div``;
 
 const PostAddNew = () => {
