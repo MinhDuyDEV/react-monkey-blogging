@@ -15,7 +15,7 @@ const Toggle = (props) => {
       />
       <div
         className={`inline-block w-[100px] h-[52px] relative cursor-pointer rounded-full p-1 transition-all ${
-          on ? "bg-purple-500" : "bg-gray-300"
+          on ? "bg-green-500" : "bg-gray-300"
         }`}
         {...rest}
       >
