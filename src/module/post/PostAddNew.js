@@ -14,6 +14,9 @@ import Toggle from "../../components/toggle/Toggle";
 import { useEffect } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebase/firebase-config";
+import { Dropdown } from "../../components/dropdown";
+import { useState } from "react";
+import Select from "../../components/dropdown/Select";
 const PostAddNewStyles = styled.div``;
 
 const PostAddNew = () => {
@@ -23,7 +26,7 @@ const PostAddNew = () => {
       title: "",
       slug: "",
       status: 2,
-      category: "",
+      categoryId: "",
       hot: false,
     },
   });
@@ -41,6 +44,7 @@ const PostAddNew = () => {
   };
   const { image, progress, handleSelectImage, handleDeleteImage } =
     useFirebaseImage(setValue, getValues);
+  const [categories, setCategories] = useState([]);
   useEffect(() => {
     async function getData() {
       const colRef = collection(db, "categories");
@@ -53,7 +57,7 @@ const PostAddNew = () => {
           ...doc.data(),
         });
       });
-      console.log("🚀 ~ file: PostAddNew.js:50 ~ getData ~ result", result);
+      setCategories(result);
     }
     getData();
   }, []);
@@ -93,7 +97,20 @@ const PostAddNew = () => {
           </Field>
           <Field>
             <Label>Category</Label>
-            <Input control={control} placeholder="Find the author"></Input>
+            <Dropdown>
+              <Dropdown.Select placeholder="Select the category"></Dropdown.Select>
+              <Dropdown.List>
+                {categories.length > 0 &&
+                  categories.map((item) => (
+                    <Dropdown.Option
+                      key={item.id}
+                      onClick={() => setValue("categoryId", item.id)}
+                    >
+                      {item.name}
+                    </Dropdown.Option>
+                  ))}
+              </Dropdown.List>
+            </Dropdown>
           </Field>
         </div>
         <div className="grid grid-cols-2 mb-10 gap-x-10">
