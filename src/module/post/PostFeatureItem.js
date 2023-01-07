@@ -77,7 +77,6 @@ const PostFeatureItem = ({ data }) => {
     fetchUser();
   }, [data.userId]);
   if (!data || !data.id) return null;
-  console.log(data);
   return (
     <PostFeatureItemStyles>
       <PostImage url={data.image} alt={data.image_name}></PostImage>
