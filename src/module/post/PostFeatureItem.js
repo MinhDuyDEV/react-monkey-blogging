@@ -1,14 +1,14 @@
-import { doc, getDoc } from "firebase/firestore";
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import slugify from "slugify";
 import styled from "styled-components";
-import { db } from "../../firebase/firebase-config";
-import PostCategory from "./PostCategory";
-import PostImage from "./PostImage";
-import PostMeta from "./PostMeta";
+import slugify from "slugify";
+import React from "react";
 import PostTitle from "./PostTitle";
+import PostMeta from "./PostMeta";
+import PostImage from "./PostImage";
+import PostCategory from "./PostCategory";
+import { useState } from "react";
+import { useEffect } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase/firebase-config";
 const PostFeatureItemStyles = styled.div`
   width: 100%;
   border-radius: 16px;
@@ -77,6 +77,10 @@ const PostFeatureItem = ({ data }) => {
     fetchUser();
   }, [data.userId]);
   if (!data || !data.id) return null;
+  const date = data?.createdAt?.seconds
+    ? new Date(data?.createdAt?.seconds * 1000)
+    : new Date();
+  const formatDate = new Date(date).toLocaleDateString("vi-VI");
   return (
     <PostFeatureItemStyles>
       <PostImage url={data.image} alt={data.image_name}></PostImage>
@@ -89,6 +93,7 @@ const PostFeatureItem = ({ data }) => {
           <PostMeta
             to={slugify(user?.name || "", { lower: true })}
             authorName={user?.name}
+            date={formatDate}
           ></PostMeta>
         </div>
         <PostTitle to={data.slug} size="big">
