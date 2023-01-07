@@ -10,9 +10,10 @@ import * as yup from "yup";
 import { toast } from "react-toastify";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { NavLink, useNavigate } from "react-router-dom";
-import { addDoc, collection } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import InputPasswordToggle from "../components/input/InputPasswordToggle";
+import slugify from "slugify";
 
 const schema = yup.object().shape({
   fullName: yup.string().required("Please enter your full name"),
@@ -54,11 +55,11 @@ const SignUpPage = () => {
     await updateProfile(auth.currentUser, {
       displayName: values.fullName,
     });
-    const colRef = collection(db, "users");
-    await addDoc(colRef, {
+    await setDoc(doc(db, "users", auth.currentUser.uid), {
       name: values.fullName,
       email: values.emailAddress,
       password: values.password,
+      username: slugify(values.fullName, { lower: true }),
     });
     toast.success("Sign Up successfully!!!", {
       pauseOnHover: false,

@@ -12,7 +12,14 @@ import ImageUpload from "../../components/image/ImageUpload";
 import useFirebaseImage from "../../hooks/useFirebaseImage";
 import Toggle from "../../components/toggle/Toggle";
 import { useEffect } from "react";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  serverTimestamp,
+  where,
+} from "firebase/firestore";
 import { db } from "../../firebase/firebase-config";
 import { Dropdown } from "../../components/dropdown";
 import { useState } from "react";
@@ -22,7 +29,15 @@ const PostAddNewStyles = styled.div``;
 
 const PostAddNew = () => {
   const { userInfo } = useAuth();
-  const { control, watch, setValue, handleSubmit, getValues, reset } = useForm({
+  const {
+    control,
+    watch,
+    setValue,
+    handleSubmit,
+    getValues,
+    reset,
+    formState: { isSubmitting },
+  } = useForm({
     mode: "onChange",
     defaultValues: {
       title: "",
@@ -49,6 +64,7 @@ const PostAddNew = () => {
       ...cloneValues,
       image,
       userId: userInfo.uid,
+      // createdAt: serverTimestamp,
     });
     toast.success("Create new post successfully!!!");
     console.log(
@@ -183,7 +199,17 @@ const PostAddNew = () => {
             </div>
           </Field>
         </div>
-        <Button type="submit" className="mx-auto">
+        <Button
+          type="submit"
+          className="mx-auto"
+          style={{
+            width: "100%",
+            maxWidth: 250,
+            margin: "0 auto",
+          }}
+          isLoading={isSubmitting}
+          disable={isSubmitting}
+        >
           Add new post
         </Button>
       </form>
