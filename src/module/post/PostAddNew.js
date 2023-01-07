@@ -51,8 +51,13 @@ const PostAddNew = () => {
   const watchStatus = watch("status");
   const watchHot = watch("hot");
   // const watchCategory = watch("category");
-  const { image, progress, handleSelectImage, handleDeleteImage } =
-    useFirebaseImage(setValue, getValues);
+  const {
+    image,
+    handleResetUpload,
+    progress,
+    handleSelectImage,
+    handleDeleteImage,
+  } = useFirebaseImage(setValue, getValues);
   const [categories, setCategories] = useState([]);
   const [selectCategory, setSelectCategory] = useState("");
   const addPostHandler = async (values) => {
@@ -64,7 +69,7 @@ const PostAddNew = () => {
       ...cloneValues,
       image,
       userId: userInfo.uid,
-      // createdAt: serverTimestamp,
+      createdAt: serverTimestamp(),
     });
     toast.success("Create new post successfully!!!");
     console.log(
@@ -80,6 +85,7 @@ const PostAddNew = () => {
       image: "",
     });
     setSelectCategory({});
+    handleResetUpload();
   };
 
   useEffect(() => {
@@ -97,6 +103,9 @@ const PostAddNew = () => {
       setCategories(result);
     }
     getData();
+  }, []);
+  useEffect(() => {
+    document.title = "Add new post";
   }, []);
   const handleClickOption = (item) => {
     setValue("categoryId", item.id);
@@ -201,14 +210,9 @@ const PostAddNew = () => {
         </div>
         <Button
           type="submit"
-          className="mx-auto"
-          style={{
-            width: "100%",
-            maxWidth: 250,
-            margin: "0 auto",
-          }}
+          className="mx-auto w-full max-w-[250px]"
           isLoading={isSubmitting}
-          disable={isSubmitting}
+          disabled={isSubmitting}
         >
           Add new post
         </Button>
