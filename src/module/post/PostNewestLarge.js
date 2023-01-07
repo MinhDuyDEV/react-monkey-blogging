@@ -33,9 +33,9 @@ const PostNewestLarge = () => {
         url="https://images.unsplash.com/photo-1590212151175-e58edd96185b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80"
         alt="unsplash"
       ></PostImage>
-      <PostCategory>Kiến thức</PostCategory>
+      <PostCategory>Knowledge</PostCategory>
       <PostTitle size="big">
-        Hướng dẫn setup phòng cực chill dành cho người mới toàn tập
+        The complete guide to learn new languages for beginners
       </PostTitle>
       <PostMeta color="secondary"></PostMeta>
     </PostNewestLargeStyles>

@@ -11,7 +11,11 @@ const HeaderStyles = styled.div`
     display: flex;
     align-items: center;
   }
-
+  .header-auth {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
   .logo {
     display: block;
     max-width: 50px;
@@ -87,12 +91,6 @@ const menuLinks = [
   },
 ];
 
-function getLastName(name) {
-  if (!name) return "User";
-  const length = name.split(" ").length;
-  return name.split(" ")[length - 1];
-}
-
 const Header = () => {
   const { userInfo } = useAuth();
   return (
@@ -162,10 +160,14 @@ const Header = () => {
             </Button>
           ) : (
             <div className="header-auth">
-              <span>Welcome back, </span>
-              <strong className="text-primary">
-                {getLastName(userInfo?.displayName)}
-              </strong>
+              <Button
+                type="button"
+                height="56px"
+                className="header-button"
+                to="/dashboard"
+              >
+                Dashboard
+              </Button>
             </div>
           )}
         </div>

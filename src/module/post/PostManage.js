@@ -1,16 +1,26 @@
 import React from "react";
-import { Pagination } from "../../components/pagination";
+import { Button } from "../../components/button";
+import { Dropdown } from "../../components/dropdown";
 import { Table } from "../../components/table";
+import DashboardHeading from "../dashboard/DashboardHeading";
 
 const PostManage = () => {
   return (
     <div>
-      <h1 className="dashboard-heading">Manage post</h1>
-      <div className="mb-10 flex justify-end">
+      <DashboardHeading
+        title="All posts"
+        desc="Manage all posts"
+      ></DashboardHeading>
+      <div className="flex justify-end gap-5 mb-10">
+        <div className="w-full max-w-[200px]">
+          <Dropdown>
+            <Dropdown.Select placeholder="Category"></Dropdown.Select>
+          </Dropdown>
+        </div>
         <div className="w-full max-w-[300px]">
           <input
             type="text"
-            className="w-full p-4 rounded-lg border border-solid border-gray-300"
+            className="w-full p-4 border border-gray-300 border-solid rounded-lg"
             placeholder="Search post..."
           />
         </div>
@@ -52,7 +62,7 @@ const PostManage = () => {
               <span className="text-gray-500">Evondev</span>
             </td>
             <td>
-              <div className="flex items-center gap-x-3 text-gray-500">
+              <div className="flex items-center text-gray-500 gap-x-3">
                 <span className="flex items-center justify-center w-10 h-10 border border-gray-200 rounded cursor-pointer">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -111,8 +121,11 @@ const PostManage = () => {
           </tr>
         </tbody>
       </Table>
-      <div className="mt-10">
-        <Pagination></Pagination>
+      <div className="mt-10 text-center">
+        {/* <Pagination></Pagination> */}
+        <Button kind="ghost" className="mx-auto w-[200px]">
+          See more+
+        </Button>
       </div>
     </div>
   );

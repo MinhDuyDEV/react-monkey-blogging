@@ -7,18 +7,19 @@ const InputStyles = styled.div`
   width: 100%;
   input {
     padding: 20px;
-    padding: ${(props) => (props.hasIcon ? "20px 60px 20px 20px" : "20px")};
+    padding: ${(props) =>
+      props.hasIcon ? "15px 60px 15px 25px" : "15px 25px"};
+    background-color: transparent;
+    border: 1px solid ${(props) => props.theme.grayf1};
     width: 100%;
-    background-color: ${(props) => props.theme.grayLight};
     border-radius: 8px;
     font-weight: 500;
     border: 1px solid transparent;
     transition: all 0.2s linear;
   }
-  input:focus {
-    background-color: white;
-    border-color: ${(props) => props.theme.primary};
-  }
+  color: ${(props) => props.theme.black};
+  font-size: 14px;
+
   input::-webkit-input-placeholder {
     color: #84878b;
   }
@@ -37,6 +38,13 @@ const InputStyles = styled.div`
     cursor: pointer;
   }
 `;
+/**
+ *
+ * @param {*} placeholder(optional) - Placeholder of input
+ * @param {*} name(optional) - name of input
+ * @param {*} control - control from react hook form
+ * @returns Input
+ */
 
 const Input = ({ name = "", type = "text", children, control, ...props }) => {
   const { field } = useController({

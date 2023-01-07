@@ -39,7 +39,7 @@ const HomeFeature = () => {
   return (
     <HomeFeatureStyles className="home-block">
       <div className="container">
-        <Heading>Bài viết nổi bật</Heading>
+        <Heading>Featured posts</Heading>
         <div className="grid-layout">
           {posts.length > 0 &&
             posts.map((post) => (

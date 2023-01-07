@@ -21,14 +21,22 @@ const PaginationStyles = styled.div`
       justify-content: center;
       align-items: center;
       font-weight: 500;
+      font-size: 16px;
+      border-radius: 10px;
+      transition: all 0.1s linear;
       &:hover {
         color: white;
-        background-color: ${(props) => props.theme.secondary};
+        background-color: ${(props) => props.theme.primary};
       }
+    }
+    &-next,
+    &-prev {
+      background-color: #ffffff;
+      box-shadow: 0px 3px 6px rgba(131, 146, 166, 0.1);
     }
     &-item.is-current {
       color: white;
-      background-color: ${(props) => props.theme.secondary};
+      background-color: ${(props) => props.theme.primary};
     }
   }
 `;
@@ -39,7 +47,7 @@ const Pagination = () => {
       <span className="pagination-prev">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
+          className="w-6 h-6"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -63,7 +71,7 @@ const Pagination = () => {
       <span className="pagination-next">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
+          className="w-6 h-6"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

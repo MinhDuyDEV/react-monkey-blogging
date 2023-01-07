@@ -1,9 +1,12 @@
 export const theme = {
-  primary: "#2EBAC1",
+  primary: "#1DC071",
   secondary: "#A4D96C",
   grayDark: "#292D32",
   grayLight: "#e7ecf3",
   tertiary: "#3A1097",
+  gray4b: "#4B5264",
+  grayf1: "#F1F1F3",
+  black: "#171725",
   accent: "#00D1ED",
   grayF3: "#F3EDFF",
   gray6B: "#6B6B6B",

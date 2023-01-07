@@ -53,9 +53,9 @@ const PostNewestItem = () => {
         alt="unsplash"
       ></PostImage>
       <div className="post-content">
-        <PostCategory type="secondary">Kiến thức</PostCategory>
+        <PostCategory type="secondary">Knowledge</PostCategory>
         <PostTitle size="small">
-          Hướng dẫn setup phòng cực chill dành cho người mới toàn tập
+          The complete guide to learn new languages for beginners
         </PostTitle>
         <PostMeta color="secondary"></PostMeta>
       </div>
