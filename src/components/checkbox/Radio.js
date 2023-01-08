@@ -40,6 +40,7 @@ const Radio = ({ checked, children, control, name, ...rest }) => {
             />
           </svg>
         </div>
+        <span>{children}</span>
       </div>
     </label>
   );

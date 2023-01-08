@@ -1,10 +1,10 @@
 import { Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./contexts/auth-context";
-import CategoryAddNew from "./drafts/CategoryAddNew";
-import CategoryManage from "./drafts/CategoryManage";
 import UserAddNew from "./drafts/UserAddNew";
 import UserManage from "./drafts/UserManage";
 import UserProfile from "./drafts/UserProfile";
+import CategoryAddNew from "./module/category/CategoryAddNew";
+import CategoryManage from "./module/category/CategoryManage";
 import DashboardLayout from "./module/dashboard/DashboardLayout";
 import PostAddNew from "./module/post/PostAddNew";
 import PostDetailsPage from "./module/post/PostDetailsPage";

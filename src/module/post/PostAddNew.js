@@ -51,7 +51,6 @@ const PostAddNew = () => {
   });
   const watchStatus = watch("status");
   const watchHot = watch("hot");
-  // const watchCategory = watch("category");
   const {
     image,
     handleResetUpload,
