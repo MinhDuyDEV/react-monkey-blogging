@@ -1,14 +1,15 @@
 import { Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./contexts/auth-context";
-import UserAddNew from "./drafts/UserAddNew";
-import UserManage from "./drafts/UserManage";
-import UserProfile from "./drafts/UserProfile";
+
 import CategoryAddNew from "./module/category/CategoryAddNew";
 import CategoryManage from "./module/category/CategoryManage";
 import DashboardLayout from "./module/dashboard/DashboardLayout";
 import PostAddNew from "./module/post/PostAddNew";
 import PostDetailsPage from "./module/post/PostDetailsPage";
 import PostManage from "./module/post/PostManage";
+import UserAddNew from "./module/user/UserAddNew";
+import UserManage from "./module/user/UserManage";
+import UserProfile from "./module/user/UserProfile";
 import DashboardPage from "./pages/DashboardPage";
 import HomePage from "./pages/HomePage";
 import PageNotFound from "./pages/PageNotFound";
