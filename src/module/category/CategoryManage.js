@@ -1,4 +1,11 @@
-import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -11,13 +18,24 @@ import { categoryStatus } from "../../utils/constants";
 import DashboardHeading from "../dashboard/DashboardHeading";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { debounce } from "lodash";
 
 const CategoryManage = () => {
   const [categoryList, setCategoryList] = useState([]);
+  const [categoryCount, setCategoryCount] = useState(0);
   const navigate = useNavigate();
+  const [filter, setFilter] = useState("");
   useEffect(() => {
     const colRef = collection(db, "categories");
-    onSnapshot(colRef, (snapshot) => {
+    const newRef = filter
+      ? query(
+          colRef,
+          where("name", ">=", filter),
+          where("name", "<=", filter + "utf8")
+        )
+      : colRef;
+    onSnapshot(newRef, (snapshot) => {
+      setCategoryCount(Number(snapshot.size));
       let results = [];
       snapshot.forEach((category) => {
         results.push({
@@ -27,7 +45,7 @@ const CategoryManage = () => {
       });
       setCategoryList(results);
     });
-  }, []);
+  }, [filter]);
 
   const handleDeleteCategory = async (docId) => {
     const colRef = doc(db, "categories", docId);
@@ -47,6 +65,10 @@ const CategoryManage = () => {
     });
   };
 
+  const handleInputFilter = debounce((e) => {
+    setFilter(e.target.value);
+  }, 500);
+
   return (
     <div>
       <DashboardHeading title="Categories" desc="Manage your category">
@@ -54,6 +76,14 @@ const CategoryManage = () => {
           Create category
         </Button>
       </DashboardHeading>
+      <div className="flex justify-end mb-10">
+        <input
+          type="text"
+          placeholder="Search category..."
+          className="px-5 py-4 border border-gray-300 rounded-lg"
+          onChange={handleInputFilter}
+        />
+      </div>
       <Table>
         <thead>
           <tr>
