@@ -46,7 +46,10 @@ const CategoryUpdate = () => {
         slug: slugify(values.name || values.slug, { lower: true }),
         status: Number(values.status),
       });
-      toast.success("Update category successfully!!!", { pauseOnHover: false });
+      toast.success("Update category successfully!!!", {
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+      });
     } catch (error) {
       toast.error(error.message);
     } finally {
