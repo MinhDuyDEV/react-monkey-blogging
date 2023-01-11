@@ -1,32 +1,54 @@
+import { doc, getDoc } from "firebase/firestore";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useSearchParams } from "react-router-dom";
 import { Button } from "../../components/button";
 import { Field } from "../../components/field";
 import ImageUpload from "../../components/image/ImageUpload";
 import { Input } from "../../components/input";
 import { Label } from "../../components/label";
+import { db } from "../../firebase/firebase-config";
 import DashboardHeading from "../dashboard/DashboardHeading";
 
 const UserProfile = () => {
-  const { control } = useForm({
+  const {
+    control,
+    reset,
+    handleSubmit,
+    formState: { isValid, isSubmitting },
+  } = useForm({
     mode: "onChange",
   });
+  const [params] = useSearchParams();
+  const userId = params.get("id");
+  useEffect(() => {
+    async function fetchData() {
+      const colRef = doc(db, "users", userId);
+      const singleDoc = await getDoc(colRef);
+      reset(singleDoc.data());
+    }
+    fetchData();
+  }, [reset, userId]);
+  const handleUpdateProfile = () => {
+    if (isValid) return;
+  };
   return (
     <div>
       <DashboardHeading
         title="Account information"
-        desc="Update your account information"
+        desc={`Update your account information id: ${userId}`}
       ></DashboardHeading>
-      <form>
+      <form onSubmit={handleSubmit(handleUpdateProfile)}>
         <div className="mb-10 text-center">
           <ImageUpload className="w-[200px] h-[200px] !rounded-full min-h-0 mx-auto"></ImageUpload>
         </div>
         <div className="form-layout">
           <Field>
-            <Label>Fullname</Label>
+            <Label>Full name</Label>
             <Input
               control={control}
-              name="fullname"
-              placeholder="Enter your fullname"
+              name="fullName"
+              placeholder="Enter your full name"
             ></Input>
           </Field>
           <Field>
@@ -88,7 +110,12 @@ const UserProfile = () => {
             ></Input>
           </Field>
         </div>
-        <Button kind="primary" className="mx-auto w-[200px]">
+        <Button
+          kind="primary"
+          className="mx-auto w-[200px]"
+          isLoading={isSubmitting}
+          disabled={isSubmitting}
+        >
           Update
         </Button>
       </form>

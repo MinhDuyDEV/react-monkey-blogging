@@ -2,15 +2,20 @@ import React, { Fragment, useState } from "react";
 import { IconEyeClose, IconEyeOpen } from "../icon";
 import Input from "./Input";
 
-const InputPasswordToggle = ({ control }) => {
+const InputPasswordToggle = ({
+  control,
+  type = "",
+  placeholder = "Please enter your password",
+}) => {
   const [togglePassword, setTogglePassword] = useState(false);
   if (!control) return null;
+  type = togglePassword ? "text" : "password";
   return (
     <Fragment>
       <Input
-        type={togglePassword ? "text" : "password"}
+        type={type}
         name="password"
-        placeholder="Please enter your password"
+        placeholder={placeholder}
         control={control}
       >
         {togglePassword ? (
