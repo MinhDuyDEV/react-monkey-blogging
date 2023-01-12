@@ -12,6 +12,8 @@ import { userStatus, userRole } from "../../utils/constants";
 import DashboardHeading from "../dashboard/DashboardHeading";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import slugify from "slugify";
+import ImageUpload from "../../components/image/ImageUpload";
+import useFirebaseImage from "../../hooks/useFirebaseImage";
 
 const UserAddNew = () => {
   const {
@@ -19,6 +21,8 @@ const UserAddNew = () => {
     handleSubmit,
     watch,
     reset,
+    setValue,
+    getValues,
     formState: { isValid, isSubmitting },
   } = useForm({
     mode: "onChange",
@@ -26,16 +30,23 @@ const UserAddNew = () => {
       fullName: "",
       email: "",
       password: "",
-      userName: "",
+      username: "",
       avatar: "",
       status: "",
       role: "",
       createdAt: new Date(),
     },
   });
+  const {
+    image,
+    progress,
+    handleDeleteImage,
+    handleResetUpload,
+    handleSelectImage,
+  } = useFirebaseImage(setValue, getValues);
   const watchStatus = watch("status");
   const watchRole = watch("role");
-  const handleAddUser = async (values) => {
+  const handleCreateUser = async (values) => {
     if (!isValid) return;
     const newValues = { ...values };
     newValues.status = Number(newValues.status);
@@ -72,6 +83,7 @@ const UserAddNew = () => {
         role: "",
         createdAt: new Date(),
       });
+      handleResetUpload();
     }
   };
   return (
@@ -80,7 +92,16 @@ const UserAddNew = () => {
         title="Add new user"
         desc="Add new user to system"
       ></DashboardHeading>
-      <form onSubmit={handleSubmit(handleAddUser)}>
+      <form onSubmit={handleSubmit(handleCreateUser)}>
+        <div className="mb-10 text-center">
+          <ImageUpload
+            className="w-[200px] h-[200px] !rounded-full min-h-0 mx-auto"
+            onChange={handleSelectImage}
+            image={image}
+            progress={progress}
+            handleDeleteImage={handleDeleteImage}
+          ></ImageUpload>
+        </div>
         <div className="form-layout">
           <Field>
             <Label>Full name</Label>
@@ -142,10 +163,10 @@ const UserAddNew = () => {
               <Radio
                 name="status"
                 control={control}
-                checked={Number(watchStatus) === userStatus.BANNED}
-                value={userStatus.BANNED}
+                checked={Number(watchStatus) === userStatus.BAN}
+                value={userStatus.BAN}
               >
-                Banned
+                Ban
               </Radio>
             </FieldCheckboxes>
           </Field>

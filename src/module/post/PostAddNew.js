@@ -89,7 +89,7 @@ const PostAddNew = () => {
   };
 
   useEffect(() => {
-    async function getData() {
+    async function fetchData() {
       const colRef = collection(db, "categories");
       const q = query(colRef, where("status", "==", 1));
       const querySnapshot = await getDocs(q);
@@ -102,7 +102,7 @@ const PostAddNew = () => {
       });
       setCategories(result);
     }
-    getData();
+    fetchData();
   }, []);
   useEffect(() => {
     document.title = "Add new post";

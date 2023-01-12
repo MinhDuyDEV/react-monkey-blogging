@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { ActionDelete, ActionEdit } from "../../components/action";
 import { LabelStatus } from "../../components/label";
-import UserRole from "../../components/label/UserRole";
 import { Table } from "../../components/table";
 import { db } from "../../firebase/firebase-config";
 import { userRole, userStatus } from "../../utils/constants";
