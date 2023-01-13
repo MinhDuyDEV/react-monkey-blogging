@@ -62,9 +62,13 @@ const SignUpPage = () => {
       fullName: values.fullName,
       email: values.emailAddress,
       password: values.password,
-      username: slugify(values.fullName, { lower: true }),
+      username: slugify(values.username || values.fullName, {
+        lower: true,
+        replacement: " ",
+        trim: true,
+      }),
       avatar:
-        "https://images.unsplash.com/photo-1673340191070-6865e61be364?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80",
+        "https://images.unsplash.com/photo-1528892952291-009c663ce843?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=344&q=80",
       status: userStatus.ACTIVE,
       role: userRole.USER,
       createdAt: serverTimestamp(),
@@ -94,7 +98,7 @@ const SignUpPage = () => {
         autoComplete="off"
       >
         <Field>
-          <Label htmlFor="fullName">Full Name</Label>
+          <Label htmlFor="fullName">Full name</Label>
           <Input
             type="text"
             name="fullName"

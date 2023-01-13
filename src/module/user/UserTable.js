@@ -8,6 +8,7 @@ import {
 } from "firebase/firestore";
 import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { ActionDelete, ActionEdit } from "../../components/action";
 import { LabelStatus } from "../../components/label";
@@ -56,6 +57,7 @@ const UserTable = () => {
       if (result.isConfirmed) {
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
         await deleteDoc(colRef);
+        toast.success("Delete user successfully!!!");
       }
     });
   };
@@ -119,7 +121,7 @@ const UserTable = () => {
                     </div>
                   </div>
                 </td>
-                <td>{user.username}</td>
+                <td title={user.username}>{user.username}</td>
                 <td>
                   <span title={user.email} className="italic text-gray-400">
                     {user.email.slice(0, 8) + "..."}

@@ -1,4 +1,4 @@
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Button } from "../../components/button";
@@ -49,14 +49,13 @@ const UserAddNew = () => {
   const handleCreateUser = async (values) => {
     if (!isValid) return;
     const newValues = { ...values };
-    const colRef = collection(db, "users");
     try {
       await createUserWithEmailAndPassword(
         auth,
         newValues.email,
         newValues.password
       );
-      await addDoc(colRef, {
+      await setDoc(doc(db, "users", auth.currentUser.uid), {
         fullName: newValues.fullName,
         email: newValues.email,
         password: newValues.password,
