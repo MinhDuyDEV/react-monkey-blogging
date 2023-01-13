@@ -10,7 +10,7 @@ import { Label } from "../../components/label";
 import { auth, db } from "../../firebase/firebase-config";
 import { userStatus, userRole } from "../../utils/constants";
 import DashboardHeading from "../dashboard/DashboardHeading";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import slugify from "slugify";
 import ImageUpload from "../../components/image/ImageUpload";
 import useFirebaseImage from "../../hooks/useFirebaseImage";
@@ -49,36 +49,41 @@ const UserAddNew = () => {
   const handleCreateUser = async (values) => {
     if (!isValid) return;
     const newValues = { ...values };
-    newValues.status = Number(newValues.status);
     const colRef = collection(db, "users");
     try {
-      await addDoc(colRef, {
-        username: slugify(values.fullName, { lower: true }),
-        ...newValues,
-        createdAt: serverTimestamp(),
-      });
       await createUserWithEmailAndPassword(
         auth,
         newValues.email,
         newValues.password
       );
-      await updateProfile(auth.currentUser, {
-        displayName: newValues.fullName,
-        photoURL:
-          "https://images.unsplash.com/photo-1673340191070-6865e61be364?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80",
+      await addDoc(colRef, {
+        fullName: newValues.fullName,
+        email: newValues.email,
+        password: newValues.password,
+        username: slugify(newValues.username || newValues.fullName, {
+          lower: true,
+          replacement: " ",
+          trim: true,
+        }),
+        avatar: image,
+        status: Number(newValues.status),
+        role: Number(newValues.role),
+        createdAt: serverTimestamp(),
       });
-      toast.success("Add user successfully!!!", {
+      toast.success(`Create new user with ${values.email} successfully!!!`, {
         pauseOnHover: false,
         pauseOnFocusLoss: false,
       });
     } catch (error) {
-      toast.error(error.message);
+      console.log(error.message);
+      toast.error("Can not create new user!!!");
     } finally {
       reset({
         fullName: "",
-        username: "",
         email: "",
         password: "",
+        username: "",
+        avatar: "",
         status: "",
         role: "",
         createdAt: new Date(),
