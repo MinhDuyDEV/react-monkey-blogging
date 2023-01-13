@@ -26,8 +26,8 @@ const UserTable = () => {
       const newRef = filter
         ? query(
             colRef,
-            where("name", ">=", filter),
-            where("name", "<=", filter + "utf8")
+            where("username", ">=", filter),
+            where("username", "<=", filter + "utf8")
           )
         : colRef;
       onSnapshot(newRef, (snapshot) => {
@@ -61,6 +61,7 @@ const UserTable = () => {
       }
     });
   };
+
   const renderRoleLabel = (role) => {
     switch (role) {
       case userRole.ADMIN:
@@ -132,7 +133,9 @@ const UserTable = () => {
                 <td>
                   <div className="flex items-center gap-x-3">
                     <ActionEdit
-                      onClick={() => navigate(`/profile?id=${user.id}`)}
+                      onClick={() =>
+                        navigate(`/manage/update-user?id=${user.id}`)
+                      }
                     ></ActionEdit>
                     <ActionDelete
                       onClick={() => handleDeleteUser(user.id)}

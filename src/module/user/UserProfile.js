@@ -1,7 +1,7 @@
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "../../components/button";
 import { Field } from "../../components/field";
 import ImageUpload from "../../components/image/ImageUpload";
@@ -11,6 +11,7 @@ import { db } from "../../firebase/firebase-config";
 import DashboardHeading from "../dashboard/DashboardHeading";
 
 const UserProfile = () => {
+  const navigate = useNavigate();
   const {
     control,
     reset,
@@ -18,18 +19,12 @@ const UserProfile = () => {
     formState: { isValid, isSubmitting },
   } = useForm({
     mode: "onChange",
+    defaultValues: {},
   });
   const [params] = useSearchParams();
   const userId = params.get("id");
-  useEffect(() => {
-    async function fetchData() {
-      const colRef = doc(db, "users", userId);
-      const singleDoc = await getDoc(colRef);
-      reset(singleDoc.data());
-    }
-    fetchData();
-  }, [reset, userId]);
-  const handleUpdateProfile = () => {
+
+  const handleUpdateProfile = async (values) => {
     if (isValid) return;
   };
   return (
