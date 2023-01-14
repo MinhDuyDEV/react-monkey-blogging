@@ -32,25 +32,13 @@ const UserUpdate = () => {
     mode: "onChange",
     defaultValues: {},
   });
-  const {
-    image,
-    progress,
-    handleDeleteImage,
-    handleResetUpload,
-    handleSelectImage,
-  } = useFirebaseImage(setValue, getValues);
   const watchStatus = watch("status");
   const watchRole = watch("role");
   const imageUrl = getValues("avatar");
-  useEffect(() => {
-    async function fetchData() {
-      if (!userId) return;
-      const colRef = doc(db, "users", userId);
-      const singleDoc = await getDoc(colRef);
-      reset(singleDoc && singleDoc.data());
-    }
-    fetchData();
-  }, [reset, userId]);
+  const imageRegex = /%2F(\S+)\?/gm.exec(imageUrl);
+  const imageName = imageRegex && imageRegex.length > 0 ? imageRegex[1] : "";
+  const { image, setImage, progress, handleDeleteImage, handleSelectImage } =
+    useFirebaseImage(setValue, getValues, imageName, deleteAvatar);
   const handleUpdateUser = async (values) => {
     if (!isValid) return;
     try {
@@ -76,9 +64,27 @@ const UserUpdate = () => {
       toast.error("Can not update user information!!!");
     } finally {
       navigate("/manage/user");
-      handleResetUpload();
     }
   };
+  async function deleteAvatar() {
+    const colRef = doc(db, "users", userId);
+    await updateDoc(colRef, {
+      avatar: "",
+    });
+  }
+  useEffect(() => {
+    setImage(imageUrl);
+  }, [imageUrl, setImage]);
+  useEffect(() => {
+    async function fetchData() {
+      if (!userId) return;
+      const colRef = doc(db, "users", userId);
+      const singleDoc = await getDoc(colRef);
+      reset(singleDoc && singleDoc.data());
+    }
+    fetchData();
+  }, [reset, userId]);
+
   if (!userId) return null;
   return (
     <div>
@@ -91,7 +97,7 @@ const UserUpdate = () => {
           <ImageUpload
             className="w-[200px] h-[200px] !rounded-full min-h-0 mx-auto"
             onChange={handleSelectImage}
-            image={imageUrl}
+            image={image}
             progress={progress}
             handleDeleteImage={handleDeleteImage}
           ></ImageUpload>
