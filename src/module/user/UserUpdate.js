@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import slugify from "slugify";
 import { Button } from "../../components/button";
 import { Radio } from "../../components/checkbox";
 import { Field, FieldCheckboxes } from "../../components/field";
@@ -17,9 +16,6 @@ import { userRole, userStatus } from "../../utils/constants";
 import DashboardHeading from "../dashboard/DashboardHeading";
 
 const UserUpdate = () => {
-  const [params] = useSearchParams();
-  const userId = params.get("id");
-  const navigate = useNavigate();
   const {
     control,
     watch,
@@ -30,8 +26,10 @@ const UserUpdate = () => {
     formState: { isValid, isSubmitting },
   } = useForm({
     mode: "onChange",
-    defaultValues: {},
   });
+  const [params] = useSearchParams();
+  const userId = params.get("id");
+  const navigate = useNavigate();
   const watchStatus = watch("status");
   const watchRole = watch("role");
   const imageUrl = getValues("avatar");
@@ -44,27 +42,15 @@ const UserUpdate = () => {
     try {
       const colRef = doc(db, "users", userId);
       await updateDoc(colRef, {
-        fullName: values.fullName,
-        username: slugify(values.username || values.fullName, {
-          lower: true,
-          replacement: " ",
-          trim: true,
-        }),
-        status: Number(values.status),
-        role: Number(values.role),
-        email: values.email,
-        password: values.password,
+        ...values,
+        avatar: image,
       });
-      toast.success("Update user information successfully!!!", {
-        pauseOnHover: false,
-        pauseOnFocusLoss: false,
-      });
+      toast.success("Update user information successfully!");
     } catch (error) {
-      console.log(error.message);
-      toast.error("Can not update user information!!!");
-    } finally {
-      navigate("/manage/user");
+      console.log(error);
+      toast.error("Update user failed!");
     }
+    navigate("/manage/user");
   };
   async function deleteAvatar() {
     const colRef = doc(db, "users", userId);

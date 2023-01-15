@@ -1,11 +1,4 @@
-import {
-  collection,
-  deleteDoc,
-  doc,
-  onSnapshot,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -17,34 +10,23 @@ import { db } from "../../firebase/firebase-config";
 import { userRole, userStatus } from "../../utils/constants";
 
 const UserTable = () => {
-  const navigate = useNavigate();
   const [userList, setUserList] = useState([]);
-  const [filter, setFilter] = useState("");
+  const navigate = useNavigate();
   useEffect(() => {
-    async function fetchData() {
-      const colRef = collection(db, "users");
-      const newRef = filter
-        ? query(
-            colRef,
-            where("username", ">=", filter),
-            where("username", "<=", filter + "utf8")
-          )
-        : colRef;
-      onSnapshot(newRef, (snapshot) => {
-        const results = [];
-        snapshot.forEach((user) => {
-          results.push({
-            id: user.id,
-            ...user.data(),
-          });
+    const colRef = collection(db, "users");
+    onSnapshot(colRef, (snapshot) => {
+      const results = [];
+      snapshot.forEach((doc) => {
+        results.push({
+          id: doc.id,
+          ...doc.data(),
         });
-        setUserList(results);
       });
-    }
-    fetchData();
-  }, [filter]);
-  const handleDeleteUser = async (id) => {
-    const colRef = doc(db, "users", id);
+      setUserList(results);
+    });
+  }, []);
+  const handleDeleteUser = async (user) => {
+    const colRef = doc(db, "users", user.id);
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -55,9 +37,9 @@ const UserTable = () => {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
         await deleteDoc(colRef);
-        toast.success("Delete user successfully!!!");
+        toast.success("Delete user successfully");
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
       }
     });
   };
