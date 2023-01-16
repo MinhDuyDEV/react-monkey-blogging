@@ -63,7 +63,6 @@ const SignUpPage = () => {
       email: values.emailAddress,
       password: values.password,
       username: slugify(values.username || values.fullName, {
-        lower: true,
         replacement: " ",
         trim: true,
       }),

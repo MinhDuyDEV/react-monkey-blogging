@@ -60,7 +60,6 @@ const UserAddNew = () => {
         email: newValues.email,
         password: newValues.password,
         username: slugify(newValues.username || newValues.fullName, {
-          lower: true,
           replacement: " ",
           trim: true,
         }),
