@@ -15,6 +15,8 @@ import { useEffect } from "react";
 import {
   addDoc,
   collection,
+  doc,
+  getDoc,
   getDocs,
   query,
   serverTimestamp,
@@ -44,9 +46,10 @@ const PostAddNew = () => {
       title: "",
       slug: "",
       status: 2,
-      categoryId: "",
       hot: false,
       image: "",
+      user: {},
+      category: {},
     },
   });
   const watchStatus = watch("status");
@@ -60,10 +63,31 @@ const PostAddNew = () => {
   } = useFirebaseImage(setValue, getValues);
   const [categories, setCategories] = useState([]);
   const [selectCategory, setSelectCategory] = useState("");
+  useEffect(() => {
+    if (!userInfo.email) return;
+    async function fetchDataUser() {
+      const q = query(
+        collection(db, "users"),
+        where("email", "==", userInfo.email)
+      );
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        setValue("user", {
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+    }
+    fetchDataUser();
+  }, [setValue, userInfo.email]);
   const addPostHandler = async (values) => {
     const cloneValues = { ...values };
     cloneValues.slug = slugify(values.slug || values.title, { lower: true });
     cloneValues.status = Number(values.status);
+    console.log(
+      "🚀 ~ file: PostAddNew.js:72 ~ addPostHandler ~ cloneValues",
+      cloneValues
+    );
     const colRef = collection(db, "posts");
     await addDoc(colRef, {
       ...cloneValues,
@@ -72,17 +96,14 @@ const PostAddNew = () => {
       createdAt: serverTimestamp(),
     });
     toast.success("Create new post successfully!!!");
-    console.log(
-      "🚀 ~ file: PostAddNew.js:33 ~ addPostHandler ~ cloneValues",
-      cloneValues
-    );
     reset({
       title: "",
       slug: "",
       status: 2,
-      categoryId: "",
       hot: false,
       image: "",
+      user: {},
+      category: {},
     });
     setSelectCategory({});
     handleResetUpload();
@@ -107,8 +128,13 @@ const PostAddNew = () => {
   useEffect(() => {
     document.title = "Add new post";
   }, []);
-  const handleClickOption = (item) => {
-    setValue("categoryId", item.id);
+  const handleClickOption = async (item) => {
+    const colRef = doc(db, "categories", item.id);
+    const docData = await getDoc(colRef);
+    setValue("category", {
+      id: docData.id,
+      ...docData.data(),
+    });
     setSelectCategory(item);
   };
   return (
