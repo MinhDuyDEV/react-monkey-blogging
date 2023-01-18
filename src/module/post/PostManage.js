@@ -17,9 +17,11 @@ import Swal from "sweetalert2";
 import { ActionDelete, ActionEdit, ActionView } from "../../components/action";
 import { Button } from "../../components/button";
 import { Dropdown } from "../../components/dropdown";
+import { LabelStatus } from "../../components/label";
 import { Table } from "../../components/table";
 import { db } from "../../firebase/firebase-config";
 import DashboardHeading from "../dashboard/DashboardHeading";
+import { postStatus } from "../../utils/constants";
 
 const POST_PER_PAGE = 1;
 
@@ -29,6 +31,7 @@ const PostManage = () => {
   const [filter, setFilter] = useState("");
   const [total, setTotal] = useState(0);
   const [lastDoc, setLastDoc] = useState();
+  const [categories, setCategories] = useState();
   useEffect(() => {
     async function fetchData() {
       const colRef = collection(db, "posts");
@@ -73,7 +76,7 @@ const PostManage = () => {
       if (result.isConfirmed) {
         await deleteDoc(colRef);
         toast.success("Delete user successfully");
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        Swal.fire("Deleted!", "Your post has been deleted.", "success");
       }
     });
   };
@@ -100,7 +103,41 @@ const PostManage = () => {
   const handleInputFilter = debounce((e) => {
     setFilter(e.target.value);
   }, 500);
-
+  useEffect(() => {
+    async function fetchData() {
+      const colRef = collection(db, "categories");
+      const q = query(colRef, where("status", "==", 1));
+      const querySnapshot = await getDocs(q);
+      let result = [];
+      querySnapshot.forEach((doc) => {
+        result.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+      setCategories(result);
+    }
+    fetchData();
+  }, []);
+  // const handleClickOption = async (item) => {
+  //   const categoryRef = doc(db, "categories", item.id);
+  //   const colRef = collection(db, "categories");
+  //   const newRef = categoryRef
+  //     ? query(colRef, where("id", "==", categoryRef))
+  //     : colRef;
+  // };
+  const RenderPostStatus = (status) => {
+    switch (status) {
+      case postStatus.APPROVED:
+        return <LabelStatus type="success">Approved</LabelStatus>;
+      case postStatus.PENDING:
+        return <LabelStatus type="warning">Pending</LabelStatus>;
+      case postStatus.REJECTED:
+        return <LabelStatus type="danger">Rejected</LabelStatus>;
+      default:
+        break;
+    }
+  };
   return (
     <div>
       <DashboardHeading
@@ -111,6 +148,17 @@ const PostManage = () => {
         <div className="w-full max-w-[200px]">
           <Dropdown>
             <Dropdown.Select placeholder="Category"></Dropdown.Select>
+            <Dropdown.List>
+              {categories?.length > 0 &&
+                categories.map((item) => (
+                  <Dropdown.Option
+                    key={item.id}
+                    // onClick={() => handleClickOption(item)}
+                  >
+                    {item.name}
+                  </Dropdown.Option>
+                ))}
+            </Dropdown.List>
           </Dropdown>
         </div>
         <div className="w-full max-w-[300px]">
@@ -129,6 +177,7 @@ const PostManage = () => {
             <th>Post</th>
             <th>Category</th>
             <th>Author</th>
+            <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -174,6 +223,7 @@ const PostManage = () => {
                       {post?.user?.username}
                     </span>
                   </td>
+                  <td>{RenderPostStatus(Number(post.status))}</td>
                   <td>
                     <div className="flex items-center gap-x-3">
                       <ActionView
