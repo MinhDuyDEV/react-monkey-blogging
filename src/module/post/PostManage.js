@@ -199,13 +199,8 @@ const PostManage = () => {
                         className="w-[66px] h-[55px] rounded object-cover"
                       />
                       <div className="flex-1">
-                        <h3
-                          className="font-semibold"
-                          title={post?.title.length > 50 ? post?.title : null}
-                        >
-                          {post?.title.length > 50
-                            ? post?.title.slice(0, 50) + "..."
-                            : post?.title}
+                        <h3 className="font-semibold whitespace-pre-wrap">
+                          {post?.title}
                         </h3>
                         <time className="text-sm text-gray-500">
                           Date: {formatDate}

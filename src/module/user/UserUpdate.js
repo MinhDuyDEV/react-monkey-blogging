@@ -47,7 +47,7 @@ const UserUpdate = () => {
       });
       toast.success("Update user information successfully!");
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
       toast.error("Update user failed!");
     }
     navigate("/manage/user");
