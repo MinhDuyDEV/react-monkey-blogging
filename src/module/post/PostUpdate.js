@@ -25,12 +25,15 @@ import { db } from "../../firebase/firebase-config";
 import useFirebaseImage from "../../hooks/useFirebaseImage";
 import { postStatus } from "../../utils/constants";
 import DashboardHeading from "../dashboard/DashboardHeading";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const PostUpdate = () => {
   const [params] = useSearchParams();
   const postId = params.get("id");
   const navigate = useNavigate();
   const [categories, setCategories] = useState();
+  const [content, setContent] = useState("");
   // const [selectCategory, setSelectCategory] = useState("");
   const {
     control,
@@ -56,6 +59,7 @@ const PostUpdate = () => {
       await updateDoc(colRef, {
         ...values,
         image,
+        content,
       });
       toast.success("Update post successfully!!!");
     } catch (error) {
@@ -168,6 +172,14 @@ const PostUpdate = () => {
             )} */}
           </Field>
         </div>
+        <div className="mb-10">
+          <Field>
+            <Label>Content</Label>
+            <div className="w-full entry-content">
+              <ReactQuill theme="snow" value={content} onChange={setContent} />;
+            </div>
+          </Field>
+        </div>
         <div className="form-layout">
           <Field>
             <Label>Feature post</Label>
@@ -214,7 +226,7 @@ const PostUpdate = () => {
           isLoading={isSubmitting}
           disabled={isSubmitting}
         >
-          Add new post
+          Update post
         </Button>
       </form>
     </div>
