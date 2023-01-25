@@ -115,8 +115,8 @@ const PostDetailsPage = () => {
     fetchData();
   }, [slug]);
   if (!slug) return <PageNotFound></PageNotFound>;
-  const date = postInfo?.createdAt.seconds
-    ? new Date(postInfo?.createdAt.seconds * 1000)
+  const date = postInfo?.createdAt?.seconds
+    ? new Date(postInfo?.createdAt?.seconds * 1000)
     : new Date();
   const formatDate = new Date(date).toLocaleDateString("vi-VI");
   const { user, category } = postInfo;
